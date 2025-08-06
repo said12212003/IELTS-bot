@@ -1,6 +1,4 @@
 config.py
+.env
 users_data.db
 __pycache__/
-*.pyc
-*.sqlite3
-*.log

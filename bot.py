@@ -309,7 +309,7 @@ async def process_listening_answer(callback: types.CallbackQuery, state: FSMCont
     await ask_listening_question(callback.message, state)
 
 
-# Trigger Scalingo deploymentп
+# Trigger Scalingo deployment
 
 if __name__ == "__main__":
     asyncio.run(main())
