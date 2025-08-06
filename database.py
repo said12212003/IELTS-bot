@@ -1,9 +1,5 @@
 import sqlite3
 from sqlite3 import Error
-from dotenv import load_dotenv
-
-
-load_dotenv()
 
 
 def create_table():

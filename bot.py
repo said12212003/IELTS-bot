@@ -1,5 +1,4 @@
 import asyncio
-import os
 import random
 import database
 from aiogram import Bot, Dispatcher, types, F
@@ -12,13 +11,8 @@ from states import Writing_State, Reading_State, Speaking_State, ListeningState,
 from sections import writing, reading, speaking, listening
 from utils import transcribe_voice_message
 from database import get_users_id, remove_user_id
-from dotenv import load_dotenv
 
-
-load_dotenv()
 bot = Bot(token=your_bot_token)
-ADMIN_ID = int(os.getenv("ADMIN_ID"))
-DATABASE_PATH = os.getenv("DATABASE_PATH", "users_data.db")
 dp = Dispatcher(storage=MemoryStorage())
 
 
@@ -46,7 +40,7 @@ async def processor(message: Message, state: FSMContext):
     await state.clear()
 
 
-@dp.message(F.text == "/satus", F.from_user.id == ADMIN_ID)
+@dp.message(F.text == "/satus", F.from_user.id == 771842442)
 async def status(message: Message):
     # if message.from_user.id == "771842442":
     await message.answer("ok")
@@ -54,7 +48,7 @@ async def status(message: Message):
     #     await message.answer("for employees only")
 
 
-@dp.message(F.text == "/broadcast", F.from_user.id == ADMIN_ID)
+@dp.message(F.text == "/broadcast", F.from_user.id == 771842442)
 async def broadcast_forwarded_message(message: Message, bot: Bot):
     if not message.reply_to_message:
         await message.answer("❗️Reply to the message you want to broadcast using /broadcast")

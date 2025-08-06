@@ -1,7 +1,7 @@
 from openai import OpenAI
-from config import openai_api_key, whisper_model, language
+from config import OPENAI_API_KEY, WHISPER_MODEL, LANGUAGE
 
-client = OpenAI(api_key=openai_api_key)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def chat_with_gpt(messages: list, model="gpt-3.5-turbo"):
@@ -11,7 +11,7 @@ def chat_with_gpt(messages: list, model="gpt-3.5-turbo"):
     return response.choices[0].message.content.strip()
 
 
-def transcribe_audio(filepath: str, model=whisper_model, language=language) -> str:
+def transcribe_audio(filepath: str, model=WHISPER_MODEL, language=LANGUAGE) -> str:
     with open(filepath, "rb") as audio_file:
         response = client.audio.transcriptions.create(
             model=model,

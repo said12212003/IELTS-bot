@@ -1,14 +1,11 @@
 import io
 import json
 from gtts import gTTS
-from dotenv import load_dotenv
 from openai import OpenAI
-from config import openai_api_key, gpt_model
+from config import OPENAI_API_KEY, GPT_MODEL
 from aiogram.types import BufferedInputFile
 
-
-load_dotenv()
-client = OpenAI(api_key=openai_api_key)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def generate_listening_test():
@@ -34,7 +31,7 @@ def generate_listening_test():
     ]
 
     response = client.chat.completions.create(
-        model=gpt_model,
+        model=GPT_MODEL,
         messages=messages
     )
 

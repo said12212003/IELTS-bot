@@ -1,8 +1,8 @@
 import json
 from openai import OpenAI
-from config import openai_api_key, gpt_model
+from config import OPENAI_API_KEY, GPT_MODEL
 
-client = OpenAI(api_key=openai_api_key)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 
 def generate_reading_passage():
@@ -27,6 +27,6 @@ def generate_reading_passage():
         {"role": "user", "content": "Generate one IELTS Reading passage with questions."}
     ]
 
-    response = client.chat.completions.create(model=gpt_model, messages=messages)
+    response = client.chat.completions.create(model=GPT_MODEL, messages=messages)
     content = response.choices[0].message.content.strip()
     return json.loads(content)
