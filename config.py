@@ -1,6 +1,0 @@
-OPENAI_API_KEY = "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"
-GPT_MODEL = "gpt-3.5-turbo"
-WHISPER_MODEL = "whisper-1"
-LANGUAGE = "en"
-
-your_bot_token = "8070570145:AAED_5tEQQTjgLo3_LiaZwbczrmNgFH3OzU"
