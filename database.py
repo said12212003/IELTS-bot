@@ -28,7 +28,7 @@ async def insert_data(tg_user_id: int, phone_number: int) -> Union[int, Exceptio
     try:
         conn = await get_connection()
         await conn.execute("""
-            INSERT INTO users (tg_user_id, phone_number)
+            INSERT INTO users_data (tg_user_id, phone_number)
             VALUES ($1, $2)
             ON CONFLICT (tg_user_id) DO NOTHING
         """, tg_user_id, phone_number)
@@ -42,7 +42,7 @@ async def data_updater(tg_user_id: int, phone_number: int) -> Union[int, Excepti
     try:
         conn = await get_connection()
         await conn.execute("""
-            UPDATE users
+            UPDATE users_data
             SET has_premium = 1
             WHERE tg_user_id = $1 AND phone_number = $2
         """, tg_user_id, phone_number)
@@ -55,7 +55,7 @@ async def data_updater(tg_user_id: int, phone_number: int) -> Union[int, Excepti
 async def get_users_id() -> Union[List[int], Exception]:
     try:
         conn = await get_connection()
-        rows = await conn.fetch("SELECT tg_user_id FROM users")
+        rows = await conn.fetch("SELECT tg_user_id FROM users_data")
         await conn.close()
         return [row["tg_user_id"] for row in rows]
     except Exception as e:
@@ -65,7 +65,7 @@ async def get_users_id() -> Union[List[int], Exception]:
 async def remove_user_id(user_id: int) -> Union[int, Exception]:
     try:
         conn = await get_connection()
-        await conn.execute("DELETE FROM users WHERE tg_user_id = $1", user_id)
+        await conn.execute("DELETE FROM users_data WHERE tg_user_id = $1", user_id)
         await conn.close()
         return 200
     except Exception as e:
