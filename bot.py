@@ -11,7 +11,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from states import Writing_State, Reading_State, Speaking_State, ListeningState, RegistrationState
 from sections import writing, reading, speaking, listening
 from utils import transcribe_voice_message
-from database import get_users_id, remove_user_id, create_table
+from database import get_users_id, remove_user_id, insert_data
 
 bot = Bot(token=os.getenv("your_bot_token"))
 dp = Dispatcher(storage=MemoryStorage())
@@ -33,7 +33,7 @@ async def processor(message: Message, state: FSMContext):
     phone_number = message.text
     tg_user_id = message.from_user.id
 
-    if database.insert_data(tg_user_id, phone_number) == 200:
+    if await insert_data(tg_user_id, phone_number) == 200:
         await message.answer("registration has been completed, please use menu button to use the bot")
     else:
         await message.answer("please contact @saidfozil, something went wrong.")
@@ -53,7 +53,7 @@ async def broadcast_forwarded_message(message: Message, bot: Bot):
 
     await message.answer("Broadcast has been started")
     source_msg = message.reply_to_message
-    user_ids = get_users_id()
+    user_ids = await get_users_id()
     success, failed = 0, 0
 
     for user_id in user_ids:
@@ -64,7 +64,7 @@ async def broadcast_forwarded_message(message: Message, bot: Bot):
         except TelegramRetryAfter as e:
             await asyncio.sleep(e.retry_after)
         except (TelegramForbiddenError, TelegramBadRequest):
-            remove_user_id(user_id)
+            await remove_user_id(user_id)
             failed += 1
 
     await message.answer(f"✅ Broadcast completed: {success} sent, {failed} failed.")
