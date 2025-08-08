@@ -11,7 +11,7 @@ async def create_table() -> Union[int, Exception]:
     try:
         conn = await get_connection()
         await conn.execute("""
-            CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS users_data (
                 id SERIAL PRIMARY KEY,
                 tg_user_id BIGINT UNIQUE NOT NULL,
                 phone_number BIGINT,
