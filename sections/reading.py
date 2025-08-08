@@ -4,7 +4,7 @@ import os
 from openai import OpenAI
 # from config import OPENAI_API_KEY, GPT_MODEL
 
-client = OpenAI(api_key=os.getenv(OPENAI_API_KEY))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def generate_reading_passage():
@@ -29,6 +29,6 @@ def generate_reading_passage():
         {"role": "user", "content": "Generate one IELTS Reading passage with questions."}
     ]
 
-    response = client.chat.completions.create(model=os.getenv(GPT_MODEL), messages=messages)
+    response = client.chat.completions.create(model=os.getenv("GPT_MODEL"), messages=messages)
     content = response.choices[0].message.content.strip()
     return json.loads(content)

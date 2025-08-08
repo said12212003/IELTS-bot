@@ -6,7 +6,7 @@ from openai import OpenAI
 # from config import OPENAI_API_KEY, GPT_MODEL
 from aiogram.types import BufferedInputFile
 
-client = OpenAI(api_key=os.getenv(OPENAI_API_KEY))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def generate_listening_test():
@@ -32,7 +32,7 @@ def generate_listening_test():
     ]
 
     response = client.chat.completions.create(
-        model=os.getenv(GPT_MODEL),
+        model=os.getenv("GPT_MODEL"),
         messages=messages
     )
 

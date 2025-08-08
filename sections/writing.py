@@ -10,7 +10,7 @@ from openai import OpenAI
 # from config import OPENAI_API_KEY, GPT_MODEL
 from openai_client import chat_with_gpt
 
-client = OpenAI(api_key=os.getenv(OPENAI_API_KEY))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def task_generator_data():
@@ -30,7 +30,7 @@ def task_generator_data():
         {"role": "user", "content": "Generate a random chart task."}
     ]
 
-    response = client.chat.completions.create(model=os.getenv(GPT_MODEL), messages=messages)
+    response = client.chat.completions.create(model=os.getenv("GPT_MODEL"), messages=messages)
     content = response.choices[0].message.content.strip()
     return json.loads(content)
 
@@ -101,7 +101,7 @@ def writing_task_two_generator():
         {"role": "user", "content": "Generate one random IELTS Writing Task 2 prompt."}
     ]
 
-    response = client.chat.completions.create(model=os.getenv(GPT_MODEL), messages=messages)
+    response = client.chat.completions.create(model=os.getenv("GPT_MODEL"), messages=messages)
     content = response.choices[0].message.content.strip()
     return json.loads(content)
 
