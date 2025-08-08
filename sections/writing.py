@@ -1,14 +1,16 @@
 import io
+import os
+
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import textwrap
 import json
 from openai import OpenAI
-from config import OPENAI_API_KEY, GPT_MODEL
+# from config import OPENAI_API_KEY, GPT_MODEL
 from openai_client import chat_with_gpt
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=os.getenv(OPENAI_API_KEY))
 
 
 def task_generator_data():
@@ -28,7 +30,7 @@ def task_generator_data():
         {"role": "user", "content": "Generate a random chart task."}
     ]
 
-    response = client.chat.completions.create(model=GPT_MODEL, messages=messages)
+    response = client.chat.completions.create(model=os.getenv(GPT_MODEL), messages=messages)
     content = response.choices[0].message.content.strip()
     return json.loads(content)
 
@@ -99,7 +101,7 @@ def writing_task_two_generator():
         {"role": "user", "content": "Generate one random IELTS Writing Task 2 prompt."}
     ]
 
-    response = client.chat.completions.create(model=GPT_MODEL, messages=messages)
+    response = client.chat.completions.create(model=os.getenv(GPT_MODEL), messages=messages)
     content = response.choices[0].message.content.strip()
     return json.loads(content)
 
@@ -127,9 +129,6 @@ def evaluate_given_writing_two(prompt: str, user_essay: str) -> str:
 
 
 def evaluate_given_writing(user_essay: str, description: str):
-    # with open("generated_task_one_d.json", "r", encoding="utf-8") as f:
-    #     data = json.load(f)
-    # description = data.get("description", "")
     full_input = (
         f"You are IELTS Writing examiner. Evaluate the following Writing Task 1"
         f"response based on official IELTS criteria, but give scores on a **10-point scale** instead of 9.\n\n"

@@ -1,4 +1,5 @@
 import asyncio
+import os
 import random
 import database
 from aiogram import Bot, Dispatcher, types, F
@@ -6,13 +7,13 @@ from aiogram.types import Message, FSInputFile, BufferedInputFile, InlineKeyboar
 from aiogram.exceptions import TelegramForbiddenError, TelegramBadRequest, TelegramRetryAfter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.memory import MemoryStorage
-from config import your_bot_token
+# from config import your_bot_token
 from states import Writing_State, Reading_State, Speaking_State, ListeningState, RegistrationState
 from sections import writing, reading, speaking, listening
 from utils import transcribe_voice_message
 from database import get_users_id, remove_user_id
 
-bot = Bot(token=your_bot_token)
+bot = Bot(token=os.getenv(your_bot_token))
 dp = Dispatcher(storage=MemoryStorage())
 
 
@@ -309,7 +310,7 @@ async def process_listening_answer(callback: types.CallbackQuery, state: FSMCont
     await ask_listening_question(callback.message, state)
 
 
-# Trigger Scalingo deployment
+# Trigger Scalingo deploymentп
 
 if __name__ == "__main__":
     asyncio.run(main())
