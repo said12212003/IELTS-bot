@@ -13,7 +13,7 @@ from sections import writing, reading, speaking, listening
 from utils import transcribe_voice_message
 from database import get_users_id, remove_user_id
 
-bot = Bot(token=os.getenv(your_bot_token))
+bot = Bot(token=os.getenv("your_bot_token"))
 dp = Dispatcher(storage=MemoryStorage())
 
 
