@@ -11,7 +11,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from states import Writing_State, Reading_State, Speaking_State, ListeningState, RegistrationState
 from sections import writing, reading, speaking, listening
 from utils import transcribe_voice_message
-from database import get_users_id, remove_user_id
+from database import get_users_id, remove_user_id, create_table
 
 bot = Bot(token=os.getenv("your_bot_token"))
 dp = Dispatcher(storage=MemoryStorage())
@@ -37,16 +37,12 @@ async def processor(message: Message, state: FSMContext):
         await message.answer("registration has been completed, please use menu button to use the bot")
     else:
         await message.answer("please contact @saidfozil, something went wrong.")
-
     await state.clear()
 
 
 @dp.message(F.text == "/satus", F.from_user.id == 771842442)
 async def status(message: Message):
-    # if message.from_user.id == "771842442":
     await message.answer("ok")
-    # else:
-    #     await message.answer("for employees only")
 
 
 @dp.message(F.text == "/broadcast", F.from_user.id == 771842442)

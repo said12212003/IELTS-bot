@@ -1,64 +1,74 @@
-import sqlite3
-from sqlite3 import Error
+import os
+import asyncpg
+from typing import List, Union
 
 
-def create_table():
-    con = sqlite3.connect("users_data.db")
+async def get_connection():
+    return await asyncpg.connect(os.getenv("DATABASE_URL"))
+
+
+async def create_table() -> Union[int, Exception]:
     try:
-        cur = con.cursor()
-        cur.execute("""CREATE TABLE users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tg_user_id INTEGER UNIQUE NOT NULL,
-        phone_number INTEGER,
-        has_premium INTEGER DEFAULT 0
-        )""")
-        con.commit()
-        con.close()
+        conn = await get_connection()
+        await conn.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                tg_user_id BIGINT UNIQUE NOT NULL,
+                phone_number BIGINT,
+                has_premium INTEGER DEFAULT 0
+            )
+        """)
+        await conn.close()
         return 200
-    except Error as e:
+    except Exception as e:
         return e
 
 
-def insert_data(tg_user_id, phone_number):
-    con = sqlite3.connect("users_data.db")
-    cursor = con.cursor()
-
+async def insert_data(tg_user_id: int, phone_number: int) -> Union[int, Exception]:
     try:
-        cursor.execute("INSERT INTO users (tg_user_id, phone_number) VALUES (?, ?)", (tg_user_id, phone_number))
-
-        con.commit()
-        con.close()
+        conn = await get_connection()
+        await conn.execute("""
+            INSERT INTO users (tg_user_id, phone_number)
+            VALUES ($1, $2)
+            ON CONFLICT (tg_user_id) DO NOTHING
+        """, tg_user_id, phone_number)
+        await conn.close()
         return 200
-    except Error:
-        return Error
+    except Exception as e:
+        return e
 
 
-def data_updater(tg_user_id, phone_number):
-    con = sqlite3.connect("user_data.db")
-    cursor = con.cursor()
-
+async def data_updater(tg_user_id: int, phone_number: int) -> Union[int, Exception]:
     try:
-        cursor.execute(f"""UPDATE users SET has_premium = 1 WHERE tg_user_id = {tg_user_id} AND phone_number = {phone_number} """)
-        con.commit()
-        con.close()
+        conn = await get_connection()
+        await conn.execute("""
+            UPDATE users
+            SET has_premium = 1
+            WHERE tg_user_id = $1 AND phone_number = $2
+        """, tg_user_id, phone_number)
+        await conn.close()
         return 200
-    except Error:
-        return Error
+    except Exception as e:
+        return e
 
 
-def get_users_id() -> list[int]:
-    con = sqlite3.connect("users_data.db")
-    cursor = con.cursor()
-
+async def get_users_id() -> Union[List[int], Exception]:
     try:
-        cursor.execute(f"""SELECT tg_user_id FROM users""")
-        return [row[0] for row in cursor.fetchall()]
-    except Error:
-        return Error
+        conn = await get_connection()
+        rows = await conn.fetch("SELECT tg_user_id FROM users")
+        await conn.close()
+        return [row["tg_user_id"] for row in rows]
+    except Exception as e:
+        return e
 
 
-def remove_user_id(user_id: int):
-    with sqlite3.connect("users_data.db") as con:
-        cur = con.cursor()
-        cur.execute("""DELETE FROM users WHERE tg_user_id = ?""", (user_id,))
-        con.commit()
+async def remove_user_id(user_id: int) -> Union[int, Exception]:
+    try:
+        conn = await get_connection()
+        await conn.execute("DELETE FROM users WHERE tg_user_id = $1", user_id)
+        await conn.close()
+        return 200
+    except Exception as e:
+        return e
+
+
