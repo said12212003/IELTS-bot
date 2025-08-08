@@ -186,62 +186,64 @@ async def reading_answer(message: Message, state: FSMContext):
 
 
 @dp.message(F.text == "/speaking")
-async def speaking_task(message: Message, state: FSMContext):
-    data = await asyncio.to_thread(speaking.generate_speaking_task)
-
-    await state.set_state(Speaking_State.waiting_for_part_one)
-    await state.update_data(
-        part1=data["part1"],
-        part2=data["part2"],
-        part3=data["part3"],
-        evaluations={}
-    )
-
-    qestions = "\n".join(f"- {q}" for q in data["part1"])
-    await message.answer(f"🗣 *IELTS Speaking Part 1*\n{qestions}\n\n🎙 Send your voice reply.", parse_mode="Markdown")
-
-
-@dp.message(Speaking_State.waiting_for_part_one)
-@dp.message(Speaking_State.waiting_for_part_two)
-@dp.message(Speaking_State.waiting_for_part_three)
-async def process_speaking_part(message: Message, state: FSMContext):
-    state_data = await state.get_data()
-    current_state = await state.get_state()
-
-    transcript = await transcribe_voice_message(bot, message)
-    if not transcript:
-        await message.answer("❌ Could not recognize your voice.")
-        return
-
-    await message.answer(f"📄 *Transcript*:\n{transcript}", parse_mode="Markdown")
-
-    if current_state == Speaking_State.waiting_for_part_one.state:
-        result = await asyncio.to_thread(speaking.evaluate_general, transcript, "Part 1")
-        state_data["evaluations"]["Part 1"] = result
-        await message.answer(f"🧑‍⚖️ *Evaluation Part 1*:\n{result}", parse_mode="Markdown")
-
-        await state.set_state(Speaking_State.waiting_for_part_two)
-        await message.answer(f"🗣 *Part 2:* {state_data['part2']}\n🎙 Send your voice reply.")
-
-    elif current_state == Speaking_State.waiting_for_part_two.state:
-        result = await asyncio.to_thread(speaking.evaluate_general, transcript, "Part 2")
-        state_data["evaluations"]["Part 2"] = result
-        await message.answer(f"🧑‍⚖️ *Evaluation Part 2*:\n{result}", parse_mode="Markdown")
-
-        await state.set_state(Speaking_State.waiting_for_part_three)
-        q3 = "\n".join(f"- {q}" for q in state_data["part3"])
-        await message.answer(f"🗣 *Part 3*:\n{q3}\n🎙 Send your voice reply.")
-
-    elif current_state == Speaking_State.waiting_for_part_three.state:
-        result = await asyncio.to_thread(speaking.evaluate_general, transcript, "Part 3")
-        state_data["evaluations"]["Part 3"] = result
-        await message.answer(f"🧑‍⚖️ *Evaluation Part 3*:\n{result}", parse_mode="Markdown")
-
-        await message.answer("✅ *Speaking session complete.*\nHere's the summary:", parse_mode="Markdown")
-        for part, res in state_data["evaluations"].items():
-            await message.answer(f"*{part}:*\n{res}", parse_mode="Markdown")
-
-        await state.clear()
+async def speaking_not_working(message: Message):
+    await message.answer(f"Permanently, out of service.")
+# async def speaking_task(message: Message, state: FSMContext):
+#     data = await asyncio.to_thread(speaking.generate_speaking_task)
+#
+#     await state.set_state(Speaking_State.waiting_for_part_one)
+#     await state.update_data(
+#         part1=data["part1"],
+#         part2=data["part2"],
+#         part3=data["part3"],
+#         evaluations={}
+#     )
+#
+#     qestions = "\n".join(f"- {q}" for q in data["part1"])
+#     await message.answer(f"🗣 *IELTS Speaking Part 1*\n{qestions}\n\n🎙 Send your voice reply.", parse_mode="Markdown")
+#
+#
+# @dp.message(Speaking_State.waiting_for_part_one)
+# @dp.message(Speaking_State.waiting_for_part_two)
+# @dp.message(Speaking_State.waiting_for_part_three)
+# async def process_speaking_part(message: Message, state: FSMContext):
+#     state_data = await state.get_data()
+#     current_state = await state.get_state()
+#
+#     transcript = await transcribe_voice_message(bot, message)
+#     if not transcript:
+#         await message.answer("❌ Could not recognize your voice.")
+#         return
+#
+#     await message.answer(f"📄 *Transcript*:\n{transcript}", parse_mode="Markdown")
+#
+#     if current_state == Speaking_State.waiting_for_part_one.state:
+#         result = await asyncio.to_thread(speaking.evaluate_general, transcript, "Part 1")
+#         state_data["evaluations"]["Part 1"] = result
+#         await message.answer(f"🧑‍⚖️ *Evaluation Part 1*:\n{result}", parse_mode="Markdown")
+#
+#         await state.set_state(Speaking_State.waiting_for_part_two)
+#         await message.answer(f"🗣 *Part 2:* {state_data['part2']}\n🎙 Send your voice reply.")
+#
+#     elif current_state == Speaking_State.waiting_for_part_two.state:
+#         result = await asyncio.to_thread(speaking.evaluate_general, transcript, "Part 2")
+#         state_data["evaluations"]["Part 2"] = result
+#         await message.answer(f"🧑‍⚖️ *Evaluation Part 2*:\n{result}", parse_mode="Markdown")
+#
+#         await state.set_state(Speaking_State.waiting_for_part_three)
+#         q3 = "\n".join(f"- {q}" for q in state_data["part3"])
+#         await message.answer(f"🗣 *Part 3*:\n{q3}\n🎙 Send your voice reply.")
+#
+#     elif current_state == Speaking_State.waiting_for_part_three.state:
+#         result = await asyncio.to_thread(speaking.evaluate_general, transcript, "Part 3")
+#         state_data["evaluations"]["Part 3"] = result
+#         await message.answer(f"🧑‍⚖️ *Evaluation Part 3*:\n{result}", parse_mode="Markdown")
+#
+#         await message.answer("✅ *Speaking session complete.*\nHere's the summary:", parse_mode="Markdown")
+#         for part, res in state_data["evaluations"].items():
+#             await message.answer(f"*{part}:*\n{res}", parse_mode="Markdown")
+#
+#         await state.clear()
 
 #listening
 
