@@ -30,7 +30,7 @@ async def cmd_start(message: Message, state: FSMContext):
 
 @dp.message(RegistrationState.waiting_for_phone_number)
 async def processor(message: Message, state: FSMContext):
-    phone_number = message.text
+    phone_number = int(message.text)
     tg_user_id = message.from_user.id
     statuss = await insert_data(tg_user_id, phone_number)
     if statuss == 200:
