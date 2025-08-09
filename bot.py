@@ -32,11 +32,11 @@ async def cmd_start(message: Message, state: FSMContext):
 async def processor(message: Message, state: FSMContext):
     phone_number = message.text
     tg_user_id = message.from_user.id
-
-    if await insert_data(tg_user_id, phone_number) == 200:
+    statuss = await insert_data(tg_user_id, phone_number)
+    if statuss == 200:
         await message.answer("registration has been completed, please use menu button to use the bot")
     else:
-        await message.answer("please contact @saidfozil, something went wrong.")
+        await message.answer(str(statuss))
     await state.clear()
 
 
