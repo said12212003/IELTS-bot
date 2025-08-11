@@ -138,9 +138,9 @@ async def send_next_question(message: Message, state: FSMContext):
         await state.clear()
         return
     q = questions[current]
-    text = f"❓ *Question {current + 1}:* {q['question']}"
+    text = f"❓ *Question {current + 1}:*\n{q['question']}"
     if "options" in q:
-        text += "\nOptions:\n" + "\n".join(f"-{opt}" for opt in q["questions"])
+        text += "\nOptions:\n" + "\n".join(f"-{opt}" for opt in q["options"])
 
     await message.answer(text, parse_mode="Markdown")
 
