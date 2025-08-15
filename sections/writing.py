@@ -109,7 +109,7 @@ def writing_task_two_generator():
 def evaluate_given_writing_two(prompt: str, user_essay: str) -> str:
     full_input = (
         f"You are a certified IELTS examiner. Evaluate the following Writing Task 2 response "
-        f"based on official IELTS criteria. Use a 10-point scale for each band:\n\n"
+        f"based on official IELTS criteria. Use a 1-10-point scale for each band:\n\n"
         f"Task 2 Prompt:\n{prompt}\n\n"
         f"Candidate's Essay:\n{user_essay}\n\n"
         f"Provide evaluation in this format:\n"
@@ -118,6 +118,7 @@ def evaluate_given_writing_two(prompt: str, user_essay: str) -> str:
         f"- Lexical Resource: (score 0–10) + comment\n"
         f"- Grammatical Range and Accuracy: (score 0–10) + comment\n"
         f"- Overall Band Score: (rounded to 1 decimal place)"
+        f"- Also provide rewrite of IELTS essay for band 7.5 and higher."
     )
 
     messages = [
