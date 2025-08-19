@@ -15,8 +15,12 @@ async def create_table() -> Union[int, Exception]:
                 id SERIAL PRIMARY KEY,
                 tg_user_id BIGINT UNIQUE NOT NULL,
                 phone_number BIGINT,
-                has_premium INTEGER DEFAULT 0,
-                last_wp2 INTEGER SET 0,
+                has_premium INTEGER NOT NULL DEFAULT 0,
+                last_wp2 INTEGER NOT NULL DEFAULT 0,
+                last_wp1 INTEGER NOT NULL DEFAULT 0,
+                last_reading INTEGER NOT NULL DEFAULT 0,
+                last_speaking INTEGER NOT NULL DEFAULT 0,
+                last_listening INTEGER NOT NULL DEFAULT 0,
             )
         """)
         await conn.close()
