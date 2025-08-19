@@ -17,6 +17,9 @@ bot = Bot(token=os.getenv("your_bot_token"))
 dp = Dispatcher(storage=MemoryStorage())
 
 
+channel_id = -1002847741571
+
+
 async def main():
     await dp.start_polling(bot)
 
@@ -40,9 +43,17 @@ async def processor(message: Message, state: FSMContext):
     await state.clear()
 
 
-@dp.message(F.text == "/satus", F.from_user.id == 771842442)
+@dp.message(F.text == "/status", F.from_user.id == 771842442)
 async def status(message: Message):
     await message.answer("ok")
+
+
+@dp.channel_post()
+async def handle_channel_post(message: types.Message):
+    if message.chat.id == channel_id:
+        msg_id = int(message.message_id)
+        text = message.text or message.caption
+        await bot.send_message(771842442, f"Message ID: {msg_id}")
 
 
 @dp.message(F.text == "/broadcast", F.from_user.id == 771842442)

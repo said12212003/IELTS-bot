@@ -15,7 +15,23 @@ async def create_table() -> Union[int, Exception]:
                 id SERIAL PRIMARY KEY,
                 tg_user_id BIGINT UNIQUE NOT NULL,
                 phone_number BIGINT,
-                has_premium INTEGER DEFAULT 0
+                has_premium INTEGER DEFAULT 0,
+                last_wp2 INTEGER SET 0,
+            )
+        """)
+        await conn.close()
+        return 200
+    except Exception as e:
+        return e
+
+
+async def create_wp2() -> Union[int, Exception]:
+    try:
+        conn = await get_connection()
+        await conn.execute("""
+        CREATE TABLE IF NOT EXISTS wp2materials (
+            id SERIAL PRIMARY KEY,
+            tg_msg_id BIGINT UNIQUE NOTNULL,
             )
         """)
         await conn.close()
@@ -38,6 +54,27 @@ async def insert_data(tg_user_id: int, phone_number: int) -> Union[int, Exceptio
         return e
 
 
+async def insert_wp2materials(tg_msg_id: int) -> Union[int, Exception]:
+    try:
+        conn = await get_connection()
+        await conn.execute("""
+            INSERT INTO wp2materials (tg_msg_id) VALUES ($1) ON CONFLICT (tg_msg_id) DO NOTHING""", tg_msg_id)
+        await conn.close()
+        return 200
+    except Exception as e:
+        return e
+
+
+async def wp2material_giver(id: int) -> Union[int, Exception]:
+    try:
+        conn = await get_connection()
+        message_id = await conn.execute("""SELECT tg_msg_id FROM wp2materials WHERE id = $1""", id)
+        await conn.close()
+        return message_id
+    except Exception as e:
+        return e
+
+
 async def data_updater(tg_user_id: int, phone_number: int) -> Union[int, Exception]:
     try:
         conn = await get_connection()
@@ -55,7 +92,7 @@ async def data_updater(tg_user_id: int, phone_number: int) -> Union[int, Excepti
 async def get_users_id() -> Union[List[int], Exception]:
     try:
         conn = await get_connection()
-        rows = await conn.fetch("SELECT tg_user_id FROM users_data")
+        rows = await conn.fetch("SELECT tg_user_id FROM users_data WHERE has_premium = 0")
         await conn.close()
         return [row["tg_user_id"] for row in rows]
     except Exception as e:
