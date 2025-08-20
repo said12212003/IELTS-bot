@@ -103,10 +103,10 @@ async def get_users_id() -> Union[List[int], Exception]:
         return e
 
 
-async def get_last_task(tg_user_id, task) -> Union[int, Exception]:
-    try:
-        conn = await get_connection()
-        last_task = await conn.fetch(f"SELECT {task} FROM WHERE ")
+# async def get_last_task(tg_user_id, task) -> Union[int, Exception]:
+#     try:
+#         conn = await get_connection()
+#         last_task = await conn.fetch(f"SELECT {task} FROM WHERE ")
 
 
 async def remove_user_id(user_id: int) -> Union[int, Exception]:
