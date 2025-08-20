@@ -11,7 +11,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from states import Writing_State, Reading_State, Speaking_State, ListeningState, RegistrationState
 from sections import writing, reading, speaking, listening
 from utils import transcribe_voice_message
-from database import get_users_id, remove_user_id, insert_data, create_wp2
+from database import get_users_id, remove_user_id, insert_data, create_wp2, insert_wp2materials
 
 bot = Bot(token=os.getenv("your_bot_token"))
 dp = Dispatcher(storage=MemoryStorage())
@@ -54,7 +54,10 @@ async def handle_channel_post(message: types.Message):
     if message.chat.id == channel_id:
         msg_id = int(message.message_id)
         text = message.text or message.caption
-        await bot.send_message(771842442, f"Message ID: {msg_id}")
+        if await insert_wp2materials(int(msg_id)) == 200:
+            await bot.send_message(771842442, f"Message ID: {msg_id}; Message content: {text}")
+        else:
+            await bot.send_message(771842442, f"Message with {msg_id} id, wasn't added to database.")
 
 
 @dp.message(F.text == "/broadcast", F.from_user.id == 771842442)
