@@ -12,7 +12,7 @@ def generate_reading_passage():
         {
             "role": "system",
             "content": (
-                "You are an IELTS Reading passage generator."
+                "You are an IELTS Reading for C1 level passage generator."
                 "Create a JSON object with a full-IELTS academic-style passage and 10-13 questions."
                 "Questions should be of types: multiple choice, true/false/not given, or short answer.\n\n"
                 "Respond ONLY with a JSON in this structure:\n"
