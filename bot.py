@@ -156,8 +156,10 @@ async def task_two_prompt(message: Message, state: FSMContext):
     elif "essay" not in data:
         await state.update_data(essay=message.text)
 
-    result = await asyncio.to_thread(writing.evaluate_given_writing_two, data['prompt'], data['essay'])
-    await message.answer(result)
+        data = await state.get_data()
+
+        result = await asyncio.to_thread(writing.evaluate_given_writing_two, data['prompt'], data['essay'])
+        await message.answer(result)
 
 
 # reading
