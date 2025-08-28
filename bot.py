@@ -159,6 +159,7 @@ async def task_two_prompt(message: Message, state: FSMContext):
         data = await state.get_data()
 
         result = await asyncio.to_thread(writing.evaluate_given_writing_two, data['prompt'], data['essay'])
+        print(result)
         await message.answer(result)
 
 
