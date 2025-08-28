@@ -4,6 +4,8 @@ from aiogram.fsm.state import State, StatesGroup
 class Writing_State(StatesGroup):
     waiting_for_writing_task_one_response = State()
     waiting_for_writing_task_two_response = State()
+    waiting_for_self_writing_task_two_prompt = State()
+    waiting_for_self_writing_task_two_response = State()
 
 
 class Reading_State(StatesGroup):

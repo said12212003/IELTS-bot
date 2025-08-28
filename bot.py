@@ -140,6 +140,26 @@ async def writing_task_two_evaluation(message: Message, state: FSMContext):
     await state.clear()
 
 
+@dp.message(F.text == "/self_writing2")
+async def self_writing(message: Message, state: FSMContext):
+    await state.set_state(Writing_State.waiting_for_self_writing_task_two_prompt)
+    await bot.send_message(message.chat.id, "Send me topic of writing task 2")
+
+
+@dp.message(Writing_State.waiting_for_self_writing_task_two_prompt)
+async def task_two_prompt(message: Message, state: FSMContext):
+    data = await state.get_data()
+
+    if "prompt" not in data:
+        await state.update_data(prompt=message.text)
+        await message.answer("Send me your essay")
+    elif "essay" not in data:
+        await state.update_data(essay=message.text)
+
+    result = await asyncio.to_thread(writing.evaluate_given_writing_two, data['prompt'], data['essay'])
+    await message.answer(result)
+
+
 # reading
 
 
