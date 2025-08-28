@@ -118,7 +118,7 @@ def evaluate_given_writing_two(prompt: str, user_essay: str) -> str:
         f"- Lexical Resource: (score 0–10) + comment\n"
         f"- Grammatical Range and Accuracy: (score 0–10) + comment\n"
         f"- Overall Band Score: (rounded to 1 decimal place)"
-        f"- Also provide rewrite of IELTS essay for band 7.5 and higher."
+        f"- If Overall Band Score is lower than 7, provide rewrite of IELTS essay for band 7.5 and higher."
     )
 
     messages = [
